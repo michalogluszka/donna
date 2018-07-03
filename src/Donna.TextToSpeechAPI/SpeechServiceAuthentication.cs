@@ -7,14 +7,14 @@ namespace Donna.Core
      /*
      * This class demonstrates how to get a valid access token.
      */
-    public class Authentication
+    public class SpeechServiceAuthentication
     {
         public static readonly string FetchTokenUri =
             "https://westus.api.cognitive.microsoft.com/sts/v1.0/issueToken";
         private string subscriptionKey;
         private string token;
 
-        public Authentication(string subscriptionKey)
+        public SpeechServiceAuthentication(string subscriptionKey)
         {
             this.subscriptionKey = subscriptionKey;
             this.token = FetchTokenAsync(FetchTokenUri, subscriptionKey).Result;
