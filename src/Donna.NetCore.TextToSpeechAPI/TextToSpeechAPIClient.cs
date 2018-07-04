@@ -2,9 +2,6 @@
 
 using Donna.NetCore.Core;
 
-
-
-
 namespace Donna.NetCore.TextToSpeechAPI
 {
     public class TextToSpeechAPIClient
