@@ -2,7 +2,7 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Donna.Core
+namespace Donna.NetCore.Core
 {
      /*
      * This class demonstrates how to get a valid access token.

@@ -1,20 +1,24 @@
 ﻿using System;
 
-using Donna.Core;
+using Donna.NetCore.Core;
 
-namespace Donna.SpeechService
-{   public class TextToSpeechAPIClient
+
+
+
+namespace Donna.NetCore.TextToSpeechAPI
+{
+    public class TextToSpeechAPIClient
     {
         private SpeechServiceAuthentication _authentication;
 
         public TextToSpeechAPIClient(SpeechServiceAuthentication authentication)
         {
-            _authentication = authentication;                        
-        }        
+            _authentication = authentication;
+        }
 
         public void TestCall()
         {
-            
+
         }
     }
 }
