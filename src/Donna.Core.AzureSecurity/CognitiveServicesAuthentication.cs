@@ -8,14 +8,14 @@ namespace Donna.Core.AzureSecurity
      /*
      * This class demonstrates how to get a valid access token.
      */
-    public class SpeechServiceAuthentication
+    public class CognitiveServicesAuthentication
     {
         public static readonly string FetchTokenUri =
             "https://westus.api.cognitive.microsoft.com/sts/v1.0/issueToken";
         private string _subscriptionKey;
         private string _token;
 
-        public SpeechServiceAuthentication(string subscriptionKey)
+        public CognitiveServicesAuthentication(string subscriptionKey)
         {
             this._subscriptionKey = subscriptionKey;
             this._token = FetchTokenAsync(FetchTokenUri, subscriptionKey).Result;

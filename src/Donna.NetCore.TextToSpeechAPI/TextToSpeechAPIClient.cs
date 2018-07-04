@@ -5,9 +5,9 @@ namespace Donna.Services.NetCore.TextToSpeechAPI
 {
     public class TextToSpeechAPIClient
     {
-        private SpeechServiceAuthentication _authentication;
+        private CognitiveServicesAuthentication _authentication;
 
-        public TextToSpeechAPIClient(SpeechServiceAuthentication authentication)
+        public TextToSpeechAPIClient(CognitiveServicesAuthentication authentication)
         {
             _authentication = authentication;   
         }

@@ -29,7 +29,7 @@ namespace Donna.UI.WPF.DonnaTestTool
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            var authenticaton = new SpeechServiceAuthentication(String.Empty);
+            var authenticaton = new CognitiveServicesAuthentication("");
 
             string token = authenticaton.GetAccessToken();
 
