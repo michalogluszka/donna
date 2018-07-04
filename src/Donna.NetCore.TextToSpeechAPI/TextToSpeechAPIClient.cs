@@ -1,8 +1,8 @@
 ﻿using System;
 
-using Donna.NetCore.Core;
+using Donna.Services.NetCore.Core;
 
-namespace Donna.NetCore.TextToSpeechAPI
+namespace Donna.Services.NetCore.TextToSpeechAPI
 {
     public class TextToSpeechAPIClient
     {
