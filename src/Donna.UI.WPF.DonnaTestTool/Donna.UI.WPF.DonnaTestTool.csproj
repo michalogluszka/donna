@@ -93,5 +93,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Donna.Core.AzureSecurity\Donna.Core.AzureSecurity.csproj">
+      <Project>{13eeb492-7f18-40c3-9058-19d0ac9e22e8}</Project>
+      <Name>Donna.Core.AzureSecurity</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

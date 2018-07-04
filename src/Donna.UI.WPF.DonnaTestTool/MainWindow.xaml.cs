@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Donna.Core.AzureSecurity;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +25,16 @@ namespace Donna.UI.WPF.DonnaTestTool
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var authenticaton = new SpeechServiceAuthentication(String.Empty);
+
+            string token = authenticaton.GetAccessToken();
+
+            Debug.WriteLine(token);
+
         }
     }
 }

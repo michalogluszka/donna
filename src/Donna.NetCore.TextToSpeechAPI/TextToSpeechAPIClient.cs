@@ -1,6 +1,5 @@
 ﻿using System;
-
-using Donna.Services.NetCore.Core;
+using Donna.Core.AzureSecurity;
 
 namespace Donna.Services.NetCore.TextToSpeechAPI
 {
@@ -10,7 +9,7 @@ namespace Donna.Services.NetCore.TextToSpeechAPI
 
         public TextToSpeechAPIClient(SpeechServiceAuthentication authentication)
         {
-            _authentication = authentication;
+            _authentication = authentication;   
         }
 
         public void TestCall()

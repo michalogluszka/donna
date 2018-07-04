@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:Donna.UI.WPF.DonnaTestTool"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+    <StackPanel>
+        <Button Content="Call" Click="Button_Click"/>
+
+    </StackPanel>
 </Window>
