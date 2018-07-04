@@ -11,7 +11,7 @@ namespace Donna.Core.AzureSecurity
     public class CognitiveServicesAuthentication
     {
         public static readonly string FetchTokenUri =
-            "https://westus.api.cognitive.microsoft.com/sts/v1.0/issueToken";
+            "https://northeurope.api.cognitive.microsoft.com/sts/v1.0/issueToken";
         private string _subscriptionKey;
         private string _token;
 
