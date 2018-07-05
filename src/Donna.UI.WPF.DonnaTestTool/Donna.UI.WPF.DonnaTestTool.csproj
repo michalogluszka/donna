@@ -98,6 +98,10 @@
       <Project>{13eeb492-7f18-40c3-9058-19d0ac9e22e8}</Project>
       <Name>Donna.Core.AzureSecurity</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Donna.Core.TTS.Client\Donna.Core.TTS.Client.csproj">
+      <Project>{69c1e96c-0ace-41a9-9440-dd79babf1f35}</Project>
+      <Name>Donna.Core.TTS.Client</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
