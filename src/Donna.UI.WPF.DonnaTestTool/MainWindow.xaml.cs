@@ -1,4 +1,5 @@
 ﻿using Donna.Core.AzureSecurity;
+using Donna.Core.AzureSecurity.Providers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -29,9 +30,12 @@ namespace Donna.UI.WPF.DonnaTestTool
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            var authenticaton = new CognitiveServicesAuthentication("");
+            //var authenticaton = new CognitiveServicesAuthentication("");
 
-            string token = authenticaton.GetAccessToken();
+            ISpeechServiceProvider provider = new SpeechServiceVariableProvider("SpeechServiceEndpoint", "SpeechServiceSubscriptionKey");
+            var auth = new AzureAuthToken(provider);
+
+            string token = auth.GetAccessToken();
 
             Debug.WriteLine(token);
 
