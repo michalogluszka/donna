@@ -60,7 +60,7 @@ namespace Donna.UI.WPF.DonnaTestTool
             {
                 RequestUri = new Uri(requestUri),
                 // Text to be spoken.
-                Text = "Hello, how are you doing?",
+                Text = "Good Evening, you are so sexy!",
                 VoiceType = Gender.Female,
                 // Refer to the documentation for complete list of supported locales.
                 Locale = "en-US",
