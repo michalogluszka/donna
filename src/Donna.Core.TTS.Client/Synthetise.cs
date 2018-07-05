@@ -1,36 +1,4 @@
-﻿//
-// Copyright (c) Microsoft. All rights reserved.
-// Licensed under the MIT license.
-//
-// Microsoft Cognitive Services (formerly Project Oxford): https://www.microsoft.com/cognitive-services
-//
-// Microsoft Cognitive Services (formerly Project Oxford) GitHub:
-// https://github.com/Microsoft/Cognitive-Speech-TTS
-//
-// Copyright (c) Microsoft Corporation
-// All rights reserved.
-//
-// MIT License:
-// Permission is hereby granted, free of charge, to any person obtaining
-// a copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to
-// permit persons to whom the Software is furnished to do so, subject to
-// the following conditions:
-//
-// The above copyright notice and this permission notice shall be
-// included in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED ""AS IS"", WITHOUT WARRANTY OF ANY KIND,
-// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-
+﻿using Donna.Core.TTS.Client;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -41,235 +9,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace CognitiveServicesTTS
+namespace Donna.Core.TTS.Client
 {
-    /// <summary>
-    /// This class demonstrates how to get a valid O-auth token
-    /// </summary>
-    public class Authentication
-    {
-        private string AccessUri;
-        private string apiKey;
-        private string accessToken;
-        private Timer accessTokenRenewer;
-
-        //Access token expires every 10 minutes. Renew it every 9 minutes only.
-        private const int RefreshTokenDuration = 9;
-
-        public Authentication(string issueTokenUri, string apiKey)
-        {
-            this.AccessUri = issueTokenUri;
-            this.apiKey = apiKey;
-
-            this.accessToken = HttpPost(issueTokenUri, this.apiKey);
-
-            // renew the token every specfied minutes
-            accessTokenRenewer = new Timer(new TimerCallback(OnTokenExpiredCallback),
-                                           this,
-                                           TimeSpan.FromMinutes(RefreshTokenDuration),
-                                           TimeSpan.FromMilliseconds(-1));
-        }
-
-        public string GetAccessToken()
-        {
-            return this.accessToken;
-        }
-
-        private void RenewAccessToken()
-        {
-            string newAccessToken = HttpPost(AccessUri, this.apiKey);
-            //swap the new token with old one
-            //Note: the swap is thread unsafe
-            this.accessToken = newAccessToken;
-            Console.WriteLine(string.Format("Renewed token for user: {0} is: {1}",
-                              this.apiKey,
-                              this.accessToken));
-        }
-
-        private void OnTokenExpiredCallback(object stateInfo)
-        {
-            try
-            {
-                RenewAccessToken();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(string.Format("Failed renewing access token. Details: {0}", ex.Message));
-            }
-            finally
-            {
-                try
-                {
-                    accessTokenRenewer.Change(TimeSpan.FromMinutes(RefreshTokenDuration), TimeSpan.FromMilliseconds(-1));
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(string.Format("Failed to reschedule the timer to renew access token. Details: {0}", ex.Message));
-                }
-            }
-        }
-
-        private string HttpPost(string accessUri, string apiKey)
-        {
-            // Prepare OAuth request
-            WebRequest webRequest = WebRequest.Create(accessUri);
-            webRequest.Method = "POST";
-            webRequest.ContentLength = 0;
-            webRequest.Headers["Ocp-Apim-Subscription-Key"] = apiKey;
-
-            using (WebResponse webResponse = webRequest.GetResponse())
-            {
-                using (Stream stream = webResponse.GetResponseStream())
-                {
-                    using (MemoryStream ms = new MemoryStream())
-                    {
-                        byte[] waveBytes = null;
-                        int count = 0;
-                        do
-                        {
-                            byte[] buf = new byte[1024];
-                            count = stream.Read(buf, 0, 1024);
-                            ms.Write(buf, 0, count);
-                        } while (stream.CanRead && count > 0);
-
-                        waveBytes = ms.ToArray();
-
-                        return Encoding.UTF8.GetString(waveBytes);
-                    }
-                }
-            }
-        }
-    }
-
-    /// <summary>
-    /// Generic event args
-    /// </summary>
-    /// <typeparam name="T">Any type T</typeparam>
-    public class GenericEventArgs<T> : EventArgs
-    {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GenericEventArgs{T}" /> class.
-        /// </summary>
-        /// <param name="eventData">The event data.</param>
-        public GenericEventArgs(T eventData)
-        {
-            this.EventData = eventData;
-        }
-
-        /// <summary>
-        /// Gets the event data.
-        /// </summary>
-        public T EventData { get; private set; }
-    }
-
-    /// <summary>
-    /// Gender of the voice.
-    /// </summary>
-    public enum Gender
-    {
-        Female,
-        Male
-    }
-
-    /// <summary>
-    /// Voice output formats.
-    /// </summary>
-    public enum AudioOutputFormat
-    {
-        /// <summary>
-        /// raw-8khz-8bit-mono-mulaw request output audio format type.
-        /// </summary>
-        Raw8Khz8BitMonoMULaw,
-
-        /// <summary>
-        /// raw-16khz-16bit-mono-pcm request output audio format type.
-        /// </summary>
-        Raw16Khz16BitMonoPcm,
-
-        /// <summary>
-        /// riff-8khz-8bit-mono-mulaw request output audio format type.
-        /// </summary>
-        Riff8Khz8BitMonoMULaw,
-
-        /// <summary>
-        /// riff-16khz-16bit-mono-pcm request output audio format type.
-        /// </summary>
-        Riff16Khz16BitMonoPcm,
-
-        // <summary>
-        /// ssml-16khz-16bit-mono-silk request output audio format type.
-        /// It is a SSML with audio segment, with audio compressed by SILK codec
-        /// </summary>
-        Ssml16Khz16BitMonoSilk,
-
-        /// <summary>
-        /// raw-16khz-16bit-mono-truesilk request output audio format type.
-        /// Audio compressed by SILK codec
-        /// </summary>
-        Raw16Khz16BitMonoTrueSilk,
-
-        /// <summary>
-        /// ssml-16khz-16bit-mono-tts request output audio format type.
-        /// It is a SSML with audio segment, and it needs tts engine to play out
-        /// </summary>
-        Ssml16Khz16BitMonoTts,
-
-        /// <summary>
-        /// audio-16khz-128kbitrate-mono-mp3 request output audio format type.
-        /// </summary>
-        Audio16Khz128KBitRateMonoMp3,
-
-        /// <summary>
-        /// audio-16khz-64kbitrate-mono-mp3 request output audio format type.
-        /// </summary>
-        Audio16Khz64KBitRateMonoMp3,
-
-        /// <summary>
-        /// audio-16khz-32kbitrate-mono-mp3 request output audio format type.
-        /// </summary>
-        Audio16Khz32KBitRateMonoMp3,
-
-        /// <summary>
-        /// audio-16khz-16kbps-mono-siren request output audio format type.
-        /// </summary>
-        Audio16Khz16KbpsMonoSiren,
-
-        /// <summary>
-        /// riff-16khz-16kbps-mono-siren request output audio format type.
-        /// </summary>
-        Riff16Khz16KbpsMonoSiren,
-
-        /// <summary>
-        /// raw-24khz-16bit-mono-truesilk request output audio format type.
-        /// </summary>
-        Raw24Khz16BitMonoTrueSilk,
-
-        /// <summary>
-        /// raw-24khz-16bit-mono-pcm request output audio format type.
-        /// </summary>
-        Raw24Khz16BitMonoPcm,
-
-        /// <summary>
-        /// riff-24khz-16bit-mono-pcm request output audio format type.
-        /// </summary>
-        Riff24Khz16BitMonoPcm,
-
-        /// <summary>
-        /// audio-24khz-48kbitrate-mono-mp3 request output audio format type.
-        /// </summary>
-        Audio24Khz48KBitRateMonoMp3,
-
-        /// <summary>
-        /// audio-24khz-96kbitrate-mono-mp3 request output audio format type.
-        /// </summary>
-        Audio24Khz96KBitRateMonoMp3,
-
-        /// <summary>
-        /// audio-24khz-160kbitrate-mono-mp3 request output audio format type.
-        /// </summary>
-        Audio24Khz160KBitRateMonoMp3
-    }
-
+ 
     /// <summary>
     /// Sample synthesize request
     /// </summary>
@@ -296,8 +38,8 @@ namespace CognitiveServicesTTS
             return ssmlDoc.ToString();
         }
 
-        private HttpClient client;
-        private HttpClientHandler handler;
+        private HttpClient _client;
+        private HttpClientHandler _clientHandler;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Synthesize"/> class.
@@ -305,14 +47,14 @@ namespace CognitiveServicesTTS
         public Synthesize()
         {
             var cookieContainer = new CookieContainer();
-            handler = new HttpClientHandler() { CookieContainer = new CookieContainer(), UseProxy = false };
-            client = new HttpClient(handler);
+            _clientHandler = new HttpClientHandler() { CookieContainer = new CookieContainer(), UseProxy = false };
+            _client = new HttpClient(_clientHandler);
         }
 
         ~Synthesize()
         {
-            client.Dispose();
-            handler.Dispose();
+            _client.Dispose();
+            _clientHandler.Dispose();
         }
 
         /// <summary>
@@ -332,10 +74,10 @@ namespace CognitiveServicesTTS
         /// <returns>A Task</returns>
         public Task Speak(CancellationToken cancellationToken, InputOptions inputOptions)
         {
-            client.DefaultRequestHeaders.Clear();
+            _client.DefaultRequestHeaders.Clear();
             foreach (var header in inputOptions.Headers)
             {
-                client.DefaultRequestHeaders.TryAddWithoutValidation(header.Key, header.Value);
+                _client.DefaultRequestHeaders.TryAddWithoutValidation(header.Key, header.Value);
             }
 
             var genderValue = "";
@@ -356,7 +98,7 @@ namespace CognitiveServicesTTS
                 Content = new StringContent(GenerateSsml(inputOptions.Locale, genderValue, inputOptions.VoiceName, inputOptions.Text))
             };
 
-            var httpTask = client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+            var httpTask = _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
             Console.WriteLine("Response status code: [{0}]", httpTask.Result.StatusCode);
 
             var saveTask = httpTask.ContinueWith(

@@ -1,6 +1,6 @@
-﻿using CognitiveServicesTTS;
-using Donna.Core.AzureSecurity;
+﻿using Donna.Core.AzureSecurity;
 using Donna.Core.AzureSecurity.Providers;
+using Donna.Core.TTS.Client;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
