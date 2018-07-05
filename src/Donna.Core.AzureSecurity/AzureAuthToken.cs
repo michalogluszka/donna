@@ -25,15 +25,19 @@ namespace Donna.Core.AzureSecurity
         /// Gets the HTTP status code for the most recent request to the token service.
         public HttpStatusCode RequestStatusCode { get; private set; }
 
-        private ISpeechServiceProvider _serviceProvider;
+        private ISubscriptionKeyProvider _subscriptionKeyProvider;
+
+        private Uri _cognitiveServicesEndpoint;
 
         /// <summary>
         /// Creates a client to obtain an access token.
         /// </summary>
         /// <param name="key">Subscription key to use to get an authentication token.</param>
-        public AzureAuthToken(ISpeechServiceProvider serviceProvider)
+        public AzureAuthToken(ISubscriptionKeyProvider serviceProvider, Uri cognitiveServicesEndpoint)
         {
-            _serviceProvider = serviceProvider;
+            _subscriptionKeyProvider = serviceProvider;
+            _cognitiveServicesEndpoint = cognitiveServicesEndpoint;
+
             this.RequestStatusCode = HttpStatusCode.InternalServerError;
         }
 
@@ -50,9 +54,9 @@ namespace Donna.Core.AzureSecurity
         /// </remarks>
         public async Task<string> GetAccessTokenAsync()
         {
-            SpeechServiceDefinition speechService = _serviceProvider.GetDefinition(); 
+            string subscriptionKey = _subscriptionKeyProvider.GetSubscriptionKey(); 
 
-            if (speechService.SubscriptionKey == string.Empty) return string.Empty;
+            if (subscriptionKey == string.Empty) return string.Empty;
 
             // Re-use the cached token if there is one.
             if ((DateTime.Now - storedTokenTime) < TokenCacheDuration)
@@ -64,9 +68,9 @@ namespace Donna.Core.AzureSecurity
             using (var request = new HttpRequestMessage())
             {
                 request.Method = HttpMethod.Post;
-                request.RequestUri = speechService.Endopoint;
+                request.RequestUri = _cognitiveServicesEndpoint;
                 request.Content = new StringContent(string.Empty);
-                request.Headers.TryAddWithoutValidation(OcpApimSubscriptionKeyHeader, speechService.SubscriptionKey);
+                request.Headers.TryAddWithoutValidation(OcpApimSubscriptionKeyHeader, subscriptionKey);
                 client.Timeout = TimeSpan.FromSeconds(2);
                 var response = await client.SendAsync(request);
                 this.RequestStatusCode = response.StatusCode;

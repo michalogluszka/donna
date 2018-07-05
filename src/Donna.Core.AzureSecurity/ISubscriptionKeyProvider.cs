@@ -4,12 +4,12 @@ using System.Text;
 
 namespace Donna.Core.AzureSecurity
 {
-    public interface ISpeechServiceProvider
+    public interface ISubscriptionKeyProvider
     {
         /// <summary>
         /// Provides endpoint and subscription key
         /// </summary>
         /// <returns>endpoint,subscriptionkey</returns>
-        SpeechServiceDefinition GetDefinition();
+        string GetSubscriptionKey();
     }
 }

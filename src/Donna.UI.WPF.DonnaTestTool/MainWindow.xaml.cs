@@ -23,6 +23,10 @@ namespace Donna.UI.WPF.DonnaTestTool
     /// </summary>
     public partial class MainWindow : Window
     {
+        private const string _textToSpeechEndpoint = "https://westus.tts.speech.microsoft.com/cognitiveservices/v1";
+
+        private const string _issueTokenEndpoint = "https://westus.api.cognitive.microsoft.com/sts/v1.0/issuetoken";
+
         public MainWindow()
         {
             InitializeComponent();
@@ -32,12 +36,16 @@ namespace Donna.UI.WPF.DonnaTestTool
         {
             //var authenticaton = new CognitiveServicesAuthentication("");
 
-            ISpeechServiceProvider provider = new SpeechServiceVariableProvider("SpeechServiceEndpoint", "SpeechServiceSubscriptionKey");
-            var auth = new AzureAuthToken(provider);
+            Uri issueTokenUri = new Uri("https://westus.api.cognitive.microsoft.com/sts/v1.0/issuetoken");
+
+            ISubscriptionKeyProvider provider = new SubscriptionKeyEnviromentVariableProvider("SpeechServiceSubscriptionKey");
+            var auth = new AzureAuthToken(provider, issueTokenUri);
 
             string token = auth.GetAccessToken();
 
             Debug.WriteLine(token);
+
+
 
         }
     }
