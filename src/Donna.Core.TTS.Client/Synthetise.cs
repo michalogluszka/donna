@@ -17,38 +17,22 @@ namespace Donna.Core.TTS.Client
     /// </summary>
     public class Synthesize
     {
-        /// <summary>
-        /// Generates SSML.
-        /// </summary>
-        /// <param name="locale">The locale.</param>
-        /// <param name="gender">The gender.</param>
-        /// <param name="name">The voice name.</param>
-        /// <param name="text">The text input.</param>
-        private string GenerateSsml(string locale, string gender, string name, string text)
-        {
-            var ssmlDoc = new XDocument(
-                              new XElement("speak",
-                                  new XAttribute("version", "1.0"),
-                                  new XAttribute(XNamespace.Xml + "lang", "en-US"),
-                                  new XElement("voice",
-                                      new XAttribute(XNamespace.Xml + "lang", locale),
-                                      new XAttribute(XNamespace.Xml + "gender", gender),
-                                      new XAttribute("name", name),
-                                      text)));
-            return ssmlDoc.ToString();
-        }
 
         private HttpClient _client;
         private HttpClientHandler _clientHandler;
 
+        private ISsmlBuilder _ssmlBuilder;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Synthesize"/> class.
         /// </summary>
-        public Synthesize()
+        public Synthesize(ISsmlBuilder ssmlBuilder)
         {
             var cookieContainer = new CookieContainer();
             _clientHandler = new HttpClientHandler() { CookieContainer = new CookieContainer(), UseProxy = false };
             _client = new HttpClient(_clientHandler);
+
+            _ssmlBuilder = ssmlBuilder;
         }
 
         ~Synthesize()
@@ -95,7 +79,7 @@ namespace Donna.Core.TTS.Client
 
             var request = new HttpRequestMessage(HttpMethod.Post, inputOptions.RequestUri)
             {
-                Content = new StringContent(GenerateSsml(inputOptions.Locale, genderValue, inputOptions.VoiceName, inputOptions.Text))
+                Content = new StringContent(_ssmlBuilder.GenerateSsml(inputOptions.Locale, genderValue, inputOptions.VoiceName, inputOptions.Text))
             };
 
             var httpTask = _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);

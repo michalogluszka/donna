@@ -26,7 +26,10 @@ namespace Donna.Core.TTS.Client.Tests
             Debug.WriteLine(accessToken);
 
             string requestUri = "https://westus.tts.speech.microsoft.com/cognitiveservices/v1";
-            var cortana = new Synthesize();
+
+            var ssmlBuilder = new SsmlBuilder();
+
+            var cortana = new Synthesize(ssmlBuilder);
 
             cortana.OnAudioAvailable += PlayAudio;
             cortana.OnError += ErrorHandler;
