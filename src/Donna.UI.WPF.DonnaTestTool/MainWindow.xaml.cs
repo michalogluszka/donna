@@ -59,7 +59,7 @@ namespace Donna.UI.WPF.DonnaTestTool
             cortana.OnError += ErrorHandler;
 
             // Reuse Synthesize object to minimize latency
-            cortana.Speak(CancellationToken.None, new Synthesize.InputOptions()
+            cortana.Speak(CancellationToken.None, new InputOptions()
             {
                 RequestUri = new Uri(requestUri),
                 // Text to be spoken.
