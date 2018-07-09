@@ -56,16 +56,16 @@ namespace Donna.Core.TTS.Client
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task</returns>
-        public Task Speak(CancellationToken cancellationToken, InputOptions inputOptions)
+        public Task Speak(CancellationToken cancellationToken, TTSRequest ttsRequest)
         {
             _client.DefaultRequestHeaders.Clear();
-            foreach (var header in inputOptions.Headers)
+            foreach (var header in ttsRequest.Headers)
             {
                 _client.DefaultRequestHeaders.TryAddWithoutValidation(header.Key, header.Value);
             }
 
             var genderValue = "";
-            switch (inputOptions.VoiceType)
+            switch (ttsRequest.VoiceType)
             {
                 case Gender.Male:
                     genderValue = "Male";
@@ -77,9 +77,9 @@ namespace Donna.Core.TTS.Client
                     break;
             }
 
-            var request = new HttpRequestMessage(HttpMethod.Post, inputOptions.RequestUri)
+            var request = new HttpRequestMessage(HttpMethod.Post, ttsRequest.RequestUri)
             {
-                Content = new StringContent(_ssmlBuilder.GenerateSsml(inputOptions.Locale, genderValue, inputOptions.VoiceName, inputOptions.Text))
+                Content = new StringContent(_ssmlBuilder.GenerateSsml(ttsRequest.Locale, genderValue, ttsRequest.VoiceName, ttsRequest.Text))
             };
 
             var httpTask = _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);

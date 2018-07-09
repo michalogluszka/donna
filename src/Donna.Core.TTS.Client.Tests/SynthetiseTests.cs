@@ -25,7 +25,7 @@ namespace Donna.Core.TTS.Client.Tests
 
             Debug.WriteLine(accessToken);
 
-            string requestUri = "https://westus.tts.speech.microsoft.com/cognitiveservices/v1";
+            var requestUri = new Uri("https://westus.tts.speech.microsoft.com/cognitiveservices/v1");
 
             var ssmlBuilder = new SsmlBuilder();
 
@@ -34,25 +34,11 @@ namespace Donna.Core.TTS.Client.Tests
             cortana.OnAudioAvailable += PlayAudio;
             cortana.OnError += ErrorHandler;
 
-            // Reuse Synthesize object to minimize latency
-            cortana.Speak(CancellationToken.None, new InputOptions()
-            {
-                RequestUri = new Uri(requestUri),
-                // Text to be spoken.
-                Text = "Good Evening!",
-                VoiceType = Gender.Female,
-                // Refer to the documentation for complete list of supported locales.
-                Locale = "en-US",
-                // You can also customize the output voice. Refer to the documentation to view the different
-                // voices that the TTS service can output.
-                // VoiceName = "Microsoft Server Speech Text to Speech Voice (en-US, Jessa24KRUS)",
-                VoiceName = "Microsoft Server Speech Text to Speech Voice (en-US, Guy24KRUS)",
-                // VoiceName = "Microsoft Server Speech Text to Speech Voice (en-US, ZiraRUS)",
+            TTSRequestBuilder ttsBuilder = new TTSRequestBuilder();
+            TTSRequest ttsRequest = ttsBuilder.Build(requestUri, accessToken, AudioOutputFormat.Riff24Khz16BitMonoPcm);
 
-                // Service can return audio in different output format.
-                OutputFormat = AudioOutputFormat.Riff24Khz16BitMonoPcm,
-                AuthorizationToken = "Bearer " + accessToken,
-            }).Wait();          
+            // Reuse Synthesize object to minimize latency
+            cortana.Speak(CancellationToken.None, ttsRequest).Wait();          
 
 
         }
