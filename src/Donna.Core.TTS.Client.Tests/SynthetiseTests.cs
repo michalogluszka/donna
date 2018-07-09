@@ -1,45 +1,21 @@
-﻿using Donna.Core.AzureSecurity;
-using Donna.Core.AzureSecurity.Providers;
-using Donna.Core.TTS.Client;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Media;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Donna.Core.AzureSecurity;
+using Donna.Core.AzureSecurity.Providers;
+using Donna.Core.TTS.Client;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Donna.UI.WPF.DonnaTestTool
+namespace Donna.Core.TTS.Client.Tests
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    [TestClass]
+    public class SynthetiseTests
     {
-        private const string _textToSpeechEndpoint = "https://westus.tts.speech.microsoft.com/cognitiveservices/v1";
-
-        private const string _issueTokenEndpoint = "https://westus.api.cognitive.microsoft.com/sts/v1.0/issuetoken";
-
-        public MainWindow()
+        [TestMethod]
+        public void SynthetiseHelloTest()
         {
-            InitializeComponent();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            //var authenticaton = new CognitiveServicesAuthentication("");
-
             Uri issueTokenUri = new Uri("https://westus.api.cognitive.microsoft.com/sts/v1.0/issuetoken");
 
             ISubscriptionKeyProvider provider = new SubscriptionKeyEnviromentVariableProvider("SpeechServiceSubscriptionKey");
@@ -73,7 +49,8 @@ namespace Donna.UI.WPF.DonnaTestTool
                 // Service can return audio in different output format.
                 OutputFormat = AudioOutputFormat.Riff24Khz16BitMonoPcm,
                 AuthorizationToken = "Bearer " + accessToken,
-            }).Wait();
+            }).Wait();          
+
 
         }
 
@@ -96,6 +73,7 @@ namespace Donna.UI.WPF.DonnaTestTool
         private static void ErrorHandler(object sender, GenericEventArgs<Exception> e)
         {
             Console.WriteLine("Unable to complete the TTS request: [{0}]", e.ToString());
+            Assert.Fail("Failed to connect to server");
         }
     }
 }
