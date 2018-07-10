@@ -19,8 +19,8 @@ namespace Donna.Core.TTS.Client
     /// </summary>
     public class Synthesize
     {
-        private HttpClient _client;
-        private HttpClientHandler _clientHandler;
+
+        private TTSClientWrapper _ttsClient;
 
         private ISsmlBuilder _ssmlBuilder;
 
@@ -29,19 +29,13 @@ namespace Donna.Core.TTS.Client
         /// </summary>
         public Synthesize(ISsmlBuilder ssmlBuilder)
         {
-            var cookieContainer = new CookieContainer();
-
-            _clientHandler = new HttpClientHandler() { CookieContainer = new CookieContainer(), UseProxy = false };
-
-            _client = new HttpClient(_clientHandler);
-
             _ssmlBuilder = ssmlBuilder;
+
+            _ttsClient = new TTSClientWrapper();
         }
 
         ~Synthesize()
         {
-            _client.Dispose();
-            _clientHandler.Dispose();
         }
 
         /// <summary>
@@ -65,14 +59,9 @@ namespace Donna.Core.TTS.Client
 
             var ttsRequest = requestBuilder.Build(parameters);
 
-            _client.DefaultRequestHeaders.Clear();
-
-            foreach (var header in ttsRequest.Headers)
-            {
-                _client.DefaultRequestHeaders.TryAddWithoutValidation(header.Key, header.Value);
-            }
-
-            var httpTask = _client.SendAsync(ttsRequest.RequestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+            var ttsClient = new TTSClientWrapper();
+            
+            var httpTask = ttsClient.SendAsync(ttsRequest, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
 
             Debug.WriteLine("Response status code: [{0}]", httpTask.Result.StatusCode);
 

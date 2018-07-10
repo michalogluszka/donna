@@ -1,15 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Donna.Core.TTS.Client.Http
 {
-    public class TTSClient : IDisposable
+    public class TTSClientWrapper : IDisposable
     {
+        private HttpClient _client;
 
-        public TTSClient()
+        private HttpClientHandler _clientHandler;
+
+        public TTSClientWrapper()
         {
+            var cookieContainer = new CookieContainer();
+            
+            _clientHandler = new HttpClientHandler() { CookieContainer = new CookieContainer(), UseProxy = false };
+            
+            _client = new HttpClient(_clientHandler);
+        }
 
+        public Task<HttpResponseMessage> SendAsync(TTSRequest ttsRequest, HttpCompletionOption completionOption, CancellationToken cancellationToken)
+        {
+            _client.DefaultRequestHeaders.Clear();
+
+            foreach (var header in ttsRequest.Headers)
+            {
+                _client.DefaultRequestHeaders.TryAddWithoutValidation(header.Key, header.Value);
+            }
+
+            var response = _client.SendAsync(ttsRequest.RequestMessage);
+
+            return response;
         }
 
         #region IDisposable Support
@@ -21,7 +46,8 @@ namespace Donna.Core.TTS.Client.Http
             {
                 if (disposing)
                 {
-                    // TODO: dispose managed state (managed objects).
+                    _client.Dispose();
+                    _clientHandler.Dispose();
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
@@ -32,7 +58,7 @@ namespace Donna.Core.TTS.Client.Http
         }
 
         // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-        // ~TTSClient() {
+        // ~TTSClientWrapper() {
         //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
         //   Dispose(false);
         // }
