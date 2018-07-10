@@ -1,5 +1,5 @@
 ﻿using System;
-using Donna.Core.AzureSecurity;
+using Donna.Core.Authorization;
 
 namespace Donna.Services.NetCore.TextToSpeechAPI
 {

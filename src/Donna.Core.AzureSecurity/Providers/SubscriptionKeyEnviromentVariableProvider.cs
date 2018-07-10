@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Donna.Core.AzureSecurity.Providers
+namespace Donna.Core.Authorization.Providers
 {
     public class SubscriptionKeyEnviromentVariableProvider : ISubscriptionKeyProvider
     {

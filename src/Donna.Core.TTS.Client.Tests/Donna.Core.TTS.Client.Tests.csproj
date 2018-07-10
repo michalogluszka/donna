@@ -55,9 +55,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Donna.Core.AzureSecurity\Donna.Core.AzureSecurity.csproj">
+    <ProjectReference Include="..\Donna.Core.AzureSecurity\Donna.Core.Authorization.csproj">
       <Project>{13EEB492-7F18-40C3-9058-19D0AC9E22E8}</Project>
-      <Name>Donna.Core.AzureSecurity</Name>
+      <Name>Donna.Core.Authorization</Name>
     </ProjectReference>
     <ProjectReference Include="..\Donna.Core.TTS.Client\Donna.Core.TTS.Client.csproj">
       <Project>{69c1e96c-0ace-41a9-9440-dd79babf1f35}</Project>

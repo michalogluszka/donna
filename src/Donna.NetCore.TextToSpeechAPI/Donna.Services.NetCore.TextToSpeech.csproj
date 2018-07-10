@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Donna.Core.AzureSecurity\Donna.Core.AzureSecurity.csproj" />
+    <ProjectReference Include="..\Donna.Core.AzureSecurity\Donna.Core.Authorization.csproj" />
   </ItemGroup>
 
 </Project>

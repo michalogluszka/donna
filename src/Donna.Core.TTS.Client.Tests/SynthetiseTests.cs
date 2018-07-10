@@ -3,8 +3,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Media;
 using System.Threading;
-using Donna.Core.AzureSecurity;
-using Donna.Core.AzureSecurity.Providers;
+using Donna.Core.Authorization;
+using Donna.Core.Authorization.Providers;
 using Donna.Core.TTS.Client;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

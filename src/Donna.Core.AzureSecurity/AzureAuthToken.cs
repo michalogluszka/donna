@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Donna.Core.AzureSecurity
+namespace Donna.Core.Authorization
 {
     /// <summary>
     /// Client to call Cognitive Services Azure Auth Token service in order to get an access token.
