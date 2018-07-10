@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Text;
 
-namespace Donna.Core.TTS.Client
+namespace Donna.Core.TTS.Client.Http
 {
-    public class TTSRequest : IDisposable
+    public class TTSClient : IDisposable
     {
-        public TTSRequest()
-        {            
-            Headers = new List<KeyValuePair<string, string>>(); 
+
+        public TTSClient()
+        {
+
         }
-
-        public List<KeyValuePair<string, string>> Headers { get; }
-
-        public HttpRequestMessage RequestMessage { get; set; }
 
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls
@@ -25,7 +21,7 @@ namespace Donna.Core.TTS.Client
             {
                 if (disposing)
                 {
-                    RequestMessage.Dispose();
+                    // TODO: dispose managed state (managed objects).
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
@@ -36,7 +32,7 @@ namespace Donna.Core.TTS.Client
         }
 
         // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-        // ~TTSRequest() {
+        // ~TTSClient() {
         //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
         //   Dispose(false);
         // }

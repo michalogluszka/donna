@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 
-namespace Donna.Core.TTS.Client
+namespace Donna.Core.TTS.Client.Http
 {
     public class TTSRequestBuilder
     {

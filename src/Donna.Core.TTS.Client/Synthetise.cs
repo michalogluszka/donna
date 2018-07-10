@@ -1,4 +1,5 @@
 ﻿using Donna.Core.TTS.Client;
+using Donna.Core.TTS.Client.Http;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
