@@ -6,11 +6,9 @@ namespace Donna.Core.TTS.Client
 {
     public class TTSRequest
     {
-        private List<KeyValuePair<string, string>> _headers;
-
         public TTSRequest()
         {            
-            _headers = new List<KeyValuePair<string, string>>(); 
+            Headers = new List<KeyValuePair<string, string>>(); 
         }
 
         /// <summary>
@@ -19,14 +17,7 @@ namespace Donna.Core.TTS.Client
         public Uri RequestUri { get; set; }
 
 
-        public List<KeyValuePair<string, string>> Headers
-        {
-            get
-            {
-                return _headers;
-            }
-            
-        }
+        public List<KeyValuePair<string, string>> Headers { get; }
 
 
         /// <summary>
