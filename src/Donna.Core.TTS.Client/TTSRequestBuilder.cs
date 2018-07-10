@@ -1,43 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Text;
 
 namespace Donna.Core.TTS.Client
 {
     public class TTSRequestBuilder
     {
-        public TTSRequest Build(Uri endpoint, string authorizationToken, AudioOutputFormat format)
+        public TTSRequest Build(TTSRequestParameters parameters)
         {
-            var request = new TTSRequest();
-
-            request.Text = "Hello World";
-
-            request.RequestUri = endpoint;
-
-            request.AuthorizationToken = "Bearer " + authorizationToken;
-
-            request.VoiceType = Gender.Female;
-
-            request.Locale = "en-US";
-
-            //available:
-            request.VoiceName = "Microsoft Server Speech Text to Speech Voice (en-US, Jessa24KRUS)";
-            // request.VoiceName = "Microsoft Server Speech Text to Speech Voice (en-US, Guy24KRUS)";
-            // request.VoiceName = "Microsoft Server Speech Text to Speech Voice (en-US, ZiraRUS)";
-
-            string outputFormat = ConvertOutputFormat(format);
+            var request = new TTSRequest();            
 
             request.Headers.Add(new KeyValuePair<string, string>("Content-Type", "application/ssml+xml"));
 
+            string outputFormat = ConvertOutputFormat(parameters.OutputFormat);
             request.Headers.Add(new KeyValuePair<string, string>("X-Microsoft-OutputFormat", outputFormat));
             // authorization Header
-            request.Headers.Add(new KeyValuePair<string, string>("Authorization", authorizationToken));
+            request.Headers.Add(new KeyValuePair<string, string>("Authorization", parameters.AuthorizationToken));
             // Refer to the doc
             request.Headers.Add(new KeyValuePair<string, string>("X-Search-AppId", "07D3234E49CE426DAA29772419F436CA"));
             // Refer to the doc
             request.Headers.Add(new KeyValuePair<string, string>("X-Search-ClientID", "1ECFAE91408841A480F00935DC390960"));
             // The software originating the requestB
             request.Headers.Add(new KeyValuePair<string, string>("User-Agent", "TTSClient"));
+
+            var requestMessage = new HttpRequestMessage(HttpMethod.Post, parameters.RequestUri)
+            {
+                Content = new StringContent(parameters.Ssml)
+            };
 
             return request;
 

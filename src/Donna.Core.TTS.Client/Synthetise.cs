@@ -1,6 +1,7 @@
 ﻿using Donna.Core.TTS.Client;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -17,7 +18,6 @@ namespace Donna.Core.TTS.Client
     /// </summary>
     public class Synthesize
     {
-
         private HttpClient _client;
         private HttpClientHandler _clientHandler;
 
@@ -29,7 +29,9 @@ namespace Donna.Core.TTS.Client
         public Synthesize(ISsmlBuilder ssmlBuilder)
         {
             var cookieContainer = new CookieContainer();
+
             _clientHandler = new HttpClientHandler() { CookieContainer = new CookieContainer(), UseProxy = false };
+
             _client = new HttpClient(_clientHandler);
 
             _ssmlBuilder = ssmlBuilder;
@@ -56,21 +58,26 @@ namespace Donna.Core.TTS.Client
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A Task</returns>
-        public Task Speak(CancellationToken cancellationToken, TTSRequest ttsRequest)
+        public Task Speak(CancellationToken cancellationToken, TTSRequestParameters parameters)
         {
+            var requestBuilder = new TTSRequestBuilder();
+
+            var ttsRequest = requestBuilder.Build(parameters);
+
             _client.DefaultRequestHeaders.Clear();
+
             foreach (var header in ttsRequest.Headers)
             {
                 _client.DefaultRequestHeaders.TryAddWithoutValidation(header.Key, header.Value);
             }
 
-            var request = new HttpRequestMessage(HttpMethod.Post, ttsRequest.RequestUri)
-            {
-                Content = new StringContent(_ssmlBuilder.GenerateSsml(ttsRequest.Locale, ttsRequest.VoiceType, ttsRequest.VoiceName, ttsRequest.Text))
-            };
+            //var ssml = _ssmlBuilder.GenerateSsml(ttsRequest.Locale, ttsRequest.VoiceType, ttsRequest.VoiceName, ttsRequest.Text);
+
+            var request = requestBuilder.Build(ttsRequest.RequestUri, ttsRequest.AuthorizationToken, AudioOutputFormat.Raw16Khz16BitMonoPcm, ssml)
 
             var httpTask = _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
-            Console.WriteLine("Response status code: [{0}]", httpTask.Result.StatusCode);
+
+            Debug.WriteLine("Response status code: [{0}]", httpTask.Result.StatusCode);
 
             var saveTask = httpTask.ContinueWith(
                 async (responseMessage, token) =>
@@ -80,16 +87,16 @@ namespace Donna.Core.TTS.Client
                         if (responseMessage.IsCompleted && responseMessage.Result != null && responseMessage.Result.IsSuccessStatusCode)
                         {
                             var httpStream = await responseMessage.Result.Content.ReadAsStreamAsync().ConfigureAwait(false);
-                            this.AudioAvailable(new GenericEventArgs<Stream>(httpStream));
+                            AudioAvailable(new GenericEventArgs<Stream>(httpStream));
                         }
                         else
                         {
-                            this.Error(new GenericEventArgs<Exception>(new Exception(String.Format("Service returned {0}", responseMessage.Result.StatusCode))));
+                            Error(new GenericEventArgs<Exception>(new Exception(String.Format("Service returned {0}", responseMessage.Result.StatusCode))));
                         }
                     }
                     catch (Exception e)
                     {
-                        this.Error(new GenericEventArgs<Exception>(e.GetBaseException()));
+                        Error(new GenericEventArgs<Exception>(e.GetBaseException()));
                     }
                     finally
                     {
@@ -108,11 +115,7 @@ namespace Donna.Core.TTS.Client
         /// </summary>
         private void AudioAvailable(GenericEventArgs<Stream> e)
         {
-            EventHandler<GenericEventArgs<Stream>> handler = this.OnAudioAvailable;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            this.OnAudioAvailable?.Invoke(this, e);
         }
 
         /// <summary>
@@ -121,11 +124,7 @@ namespace Donna.Core.TTS.Client
         /// <param name="e">The exception</param>
         private void Error(GenericEventArgs<Exception> e)
         {
-            EventHandler<GenericEventArgs<Exception>> handler = this.OnError;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            this.OnError?.Invoke(this, e);
         }
 
 
