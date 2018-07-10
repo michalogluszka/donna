@@ -56,8 +56,7 @@ namespace Donna.Core.TTS.Client
 
             using (var ttsClient = new TTSClientWrapper())
             {
-
-                var httpTask = ttsClient.SendAsync(ttsRequest, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+                Task<HttpResponseMessage> httpTask = ttsClient.SendAsync(ttsRequest, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
 
                 Debug.WriteLine("Response status code: [{0}]", httpTask.Result.StatusCode);
 
