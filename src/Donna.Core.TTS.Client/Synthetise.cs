@@ -71,7 +71,7 @@ namespace Donna.Core.TTS.Client
                 _client.DefaultRequestHeaders.TryAddWithoutValidation(header.Key, header.Value);
             }
 
-            //var ssml = _ssmlBuilder.GenerateSsml(ttsRequest.Locale, ttsRequest.VoiceType, ttsRequest.VoiceName, ttsRequest.Text);
+            var ssml = _ssmlBuilder.GenerateSsml(ttsRequest.Locale, ttsRequest.VoiceType, ttsRequest.VoiceName, ttsRequest.Text);
 
             var request = requestBuilder.Build(ttsRequest.RequestUri, ttsRequest.AuthorizationToken, AudioOutputFormat.Raw16Khz16BitMonoPcm, ssml)
 
