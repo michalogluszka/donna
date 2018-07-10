@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Donna.Core.TTS.Client.Http
 {
+    //TODO: This shouldn't be wrapper
     public class TTSClientWrapper : IDisposable
     {
         private HttpClient _client;
