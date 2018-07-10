@@ -24,7 +24,7 @@ namespace Donna.Core.TTS.Client
             // The software originating the requestB
             request.Headers.Add(new KeyValuePair<string, string>("User-Agent", "TTSClient"));
 
-            var requestMessage = new HttpRequestMessage(HttpMethod.Post, parameters.RequestUri)
+            request.RequestMessage = new HttpRequestMessage(HttpMethod.Post, parameters.RequestUri)
             {
                 Content = new StringContent(parameters.Ssml)
             };

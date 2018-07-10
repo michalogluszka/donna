@@ -71,11 +71,7 @@ namespace Donna.Core.TTS.Client
                 _client.DefaultRequestHeaders.TryAddWithoutValidation(header.Key, header.Value);
             }
 
-            var ssml = _ssmlBuilder.GenerateSsml(ttsRequest.Locale, ttsRequest.VoiceType, ttsRequest.VoiceName, ttsRequest.Text);
-
-            var request = requestBuilder.Build(ttsRequest.RequestUri, ttsRequest.AuthorizationToken, AudioOutputFormat.Raw16Khz16BitMonoPcm, ssml)
-
-            var httpTask = _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+            var httpTask = _client.SendAsync(ttsRequest.RequestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
 
             Debug.WriteLine("Response status code: [{0}]", httpTask.Result.StatusCode);
 
@@ -101,7 +97,7 @@ namespace Donna.Core.TTS.Client
                     finally
                     {
                         responseMessage.Dispose();
-                        request.Dispose();
+                        ttsRequest.Dispose();
                     }
                 },
                 TaskContinuationOptions.AttachedToParent,

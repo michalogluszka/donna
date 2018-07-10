@@ -34,11 +34,21 @@ namespace Donna.Core.TTS.Client.Tests
             cortana.OnAudioAvailable += PlayAudio;
             cortana.OnError += ErrorHandler;
 
-            TTSRequestBuilder ttsBuilder = new TTSRequestBuilder();
-            TTSRequest ttsRequest = ttsBuilder.Build(requestUri, accessToken, AudioOutputFormat.Riff24Khz16BitMonoPcm);
+            var requestParams = new TTSRequestParameters()
+            {
+                AuthorizationToken = accessToken,
+                RequestUri = requestUri,
+                OutputFormat = AudioOutputFormat.Riff24Khz16BitMonoPcm,
+                Locale = "en-US",
+                Ssml = ssmlBuilder.GenerateSsml("en-US", Gender.Male, "Microsoft Server Speech Text to Speech Voice (en-US, Jessa24KRUS)", "Hello. You are so awesome!"),
+                VoiceName = "Microsoft Server Speech Text to Speech Voice (en-US, Jessa24KRUS)",
+                // request.VoiceName = "Microsoft Server Speech Text to Speech Voice (en-US, Guy24KRUS)";
+                // request.VoiceName = "Microsoft Server Speech Text to Speech Voice (en-US, ZiraRUS)";
+                VoiceType = Gender.Female
+            };
 
             // Reuse Synthesize object to minimize latency
-            cortana.Speak(CancellationToken.None, ttsRequest).Wait();          
+            cortana.Speak(CancellationToken.None, requestParams).Wait();          
 
 
         }
