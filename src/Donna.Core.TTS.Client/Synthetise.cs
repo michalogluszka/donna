@@ -19,9 +19,6 @@ namespace Donna.Core.TTS.Client
     /// </summary>
     public class Synthesize
     {
-
-        private TTSClientWrapper _ttsClient;
-
         private ISsmlBuilder _ssmlBuilder;
 
         /// <summary>
@@ -30,8 +27,6 @@ namespace Donna.Core.TTS.Client
         public Synthesize(ISsmlBuilder ssmlBuilder)
         {
             _ssmlBuilder = ssmlBuilder;
-
-            _ttsClient = new TTSClientWrapper();
         }
 
         ~Synthesize()
@@ -59,41 +54,45 @@ namespace Donna.Core.TTS.Client
 
             var ttsRequest = requestBuilder.Build(parameters);
 
-            var ttsClient = new TTSClientWrapper();
+            using (var ttsClient = new TTSClientWrapper())
+            {
+
+                var httpTask = ttsClient.SendAsync(ttsRequest, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+
+                Debug.WriteLine("Response status code: [{0}]", httpTask.Result.StatusCode);
+
+                var saveTask = httpTask.ContinueWith(
+                    async (responseMessage, token) =>
+                    {
+                        try
+                        {
+                            if (responseMessage.IsCompleted && responseMessage.Result != null && responseMessage.Result.IsSuccessStatusCode)
+                            {
+                                var httpStream = await responseMessage.Result.Content.ReadAsStreamAsync().ConfigureAwait(false);
+                                AudioAvailable(new GenericEventArgs<Stream>(httpStream));
+                            }
+                            else
+                            {
+                                Error(new GenericEventArgs<Exception>(new Exception(String.Format("Service returned {0}", responseMessage.Result.StatusCode))));
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Error(new GenericEventArgs<Exception>(e.GetBaseException()));
+                        }
+                        finally
+                        {
+                            responseMessage.Dispose();
+                            ttsRequest.Dispose();
+                        }
+                    },
+                    TaskContinuationOptions.AttachedToParent,
+                    cancellationToken);
+
+                return saveTask;
+            }
+
             
-            var httpTask = ttsClient.SendAsync(ttsRequest, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
-
-            Debug.WriteLine("Response status code: [{0}]", httpTask.Result.StatusCode);
-
-            var saveTask = httpTask.ContinueWith(
-                async (responseMessage, token) =>
-                {
-                    try
-                    {
-                        if (responseMessage.IsCompleted && responseMessage.Result != null && responseMessage.Result.IsSuccessStatusCode)
-                        {
-                            var httpStream = await responseMessage.Result.Content.ReadAsStreamAsync().ConfigureAwait(false);
-                            AudioAvailable(new GenericEventArgs<Stream>(httpStream));
-                        }
-                        else
-                        {
-                            Error(new GenericEventArgs<Exception>(new Exception(String.Format("Service returned {0}", responseMessage.Result.StatusCode))));
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Error(new GenericEventArgs<Exception>(e.GetBaseException()));
-                    }
-                    finally
-                    {
-                        responseMessage.Dispose();
-                        ttsRequest.Dispose();
-                    }
-                },
-                TaskContinuationOptions.AttachedToParent,
-                cancellationToken);
-
-            return saveTask;
         }
 
         /// <summary>
