@@ -2,6 +2,6 @@
 {
     public interface ISsmlBuilder
     {
-        string GenerateSsml(string locale, string gender, string name, string text);
+        string GenerateSsml(string locale, Gender gender, string name, string text);
     }
 }

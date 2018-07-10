@@ -64,22 +64,9 @@ namespace Donna.Core.TTS.Client
                 _client.DefaultRequestHeaders.TryAddWithoutValidation(header.Key, header.Value);
             }
 
-            var genderValue = "";
-            switch (ttsRequest.VoiceType)
-            {
-                case Gender.Male:
-                    genderValue = "Male";
-                    break;
-
-                case Gender.Female:
-                default:
-                    genderValue = "Female";
-                    break;
-            }
-
             var request = new HttpRequestMessage(HttpMethod.Post, ttsRequest.RequestUri)
             {
-                Content = new StringContent(_ssmlBuilder.GenerateSsml(ttsRequest.Locale, genderValue, ttsRequest.VoiceName, ttsRequest.Text))
+                Content = new StringContent(_ssmlBuilder.GenerateSsml(ttsRequest.Locale, ttsRequest.VoiceType, ttsRequest.VoiceName, ttsRequest.Text))
             };
 
             var httpTask = _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
