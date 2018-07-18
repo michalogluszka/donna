@@ -13,20 +13,24 @@ namespace Donna.Core.TTS.Client.Tests
     [TestClass]
     public class SynthetiseTests
     {
-        [TestMethod]
-        public void VoiceNameTest()
+        private string _accessToken;
+
+        private Uri _requestUri = new Uri("https://westus.tts.speech.microsoft.com/cognitiveservices/v1");
+
+        [TestInitialize]
+        public void Initialize()
         {
             Uri issueTokenUri = new Uri("https://westus.api.cognitive.microsoft.com/sts/v1.0/issuetoken");
 
             ISubscriptionKeyProvider provider = new SubscriptionKeyEnviromentVariableProvider("SpeechServiceSubscriptionKey");
             var auth = new AzureAuthToken(provider, issueTokenUri);
 
-            string accessToken = auth.GetAccessToken();
+            _accessToken = auth.GetAccessToken();
+        }
 
-            Debug.WriteLine(accessToken);
-
-            var requestUri = new Uri("https://westus.tts.speech.microsoft.com/cognitiveservices/v1");
-
+        [TestMethod]
+        public void VoiceNameTest()
+        {
             var ssmlBuilder = new SimpleTextSsmlBuilder();
             var cortana = new Synthesize();
 
@@ -41,8 +45,8 @@ namespace Donna.Core.TTS.Client.Tests
 
             var requestParams = new TTSRequestParameters()
             {
-                AuthorizationToken = accessToken,
-                RequestUri = requestUri,
+                AuthorizationToken = _accessToken,
+                RequestUri = _requestUri,
                 OutputFormat = AudioOutputFormat.Riff24Khz16BitMonoPcm,
                 Ssml = ssml
             };
