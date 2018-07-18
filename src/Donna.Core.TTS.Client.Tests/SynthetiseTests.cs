@@ -14,7 +14,7 @@ namespace Donna.Core.TTS.Client.Tests
     public class SynthetiseTests
     {
         [TestMethod]
-        public void SynthetiseHelloTest()
+        public void VoiceNameTest()
         {
             Uri issueTokenUri = new Uri("https://westus.api.cognitive.microsoft.com/sts/v1.0/issuetoken");
 
@@ -27,7 +27,7 @@ namespace Donna.Core.TTS.Client.Tests
 
             var requestUri = new Uri("https://westus.tts.speech.microsoft.com/cognitiveservices/v1");
 
-            var ssmlBuilder = new SsmlBuilder();
+            var ssmlBuilder = new SimpleTextSsmlBuilder();
             var cortana = new Synthesize();
 
             cortana.OnAudioAvailable += PlayAudio;
@@ -37,7 +37,7 @@ namespace Donna.Core.TTS.Client.Tests
             // string voiceName = "Microsoft Server Speech Text to Speech Voice (en-US, Guy24KRUS)";
             // string voiceName = "Microsoft Server Speech Text to Speech Voice (en-US, ZiraRUS)";
 
-            string ssml = ssmlBuilder.GenerateSsml("en-US", Gender.Male, voiceName, "Hello. You are so awesome!");
+            string ssml = ssmlBuilder.GenerateSsml("en-US", voiceName, "Hello. You are so awesome!");
 
             var requestParams = new TTSRequestParameters()
             {
@@ -52,6 +52,41 @@ namespace Donna.Core.TTS.Client.Tests
 
 
         }
+
+        //[TestMethod]
+        //public void GenderTest()
+        //{
+        //    Uri issueTokenUri = new Uri("https://westus.api.cognitive.microsoft.com/sts/v1.0/issuetoken");
+
+        //    ISubscriptionKeyProvider provider = new SubscriptionKeyEnviromentVariableProvider("SpeechServiceSubscriptionKey");
+        //    var auth = new AzureAuthToken(provider, issueTokenUri);
+
+        //    string accessToken = auth.GetAccessToken();
+
+        //    Debug.WriteLine(accessToken);
+
+        //    var requestUri = new Uri("https://westus.tts.speech.microsoft.com/cognitiveservices/v1");
+
+        //    var ssmlBuilder = new SimpleTextSsmlBuilder();
+        //    var cortana = new Synthesize();
+
+        //    cortana.OnAudioAvailable += PlayAudio;
+        //    cortana.OnError += ErrorHandler;
+
+        //    string ssml = ssmlBuilder.GenerateSsml("en-US", Gender.Male, "Hello. You are so awesome!");
+
+        //    var requestParams = new TTSRequestParameters()
+        //    {
+        //        AuthorizationToken = accessToken,
+        //        RequestUri = requestUri,
+        //        OutputFormat = AudioOutputFormat.Riff24Khz16BitMonoPcm,
+        //        Ssml = ssml
+        //    };
+
+        //    // Reuse Synthesize object to minimize latency
+        //    cortana.Speak(CancellationToken.None, requestParams).Wait();
+        //}
+
 
         private static void PlayAudio(object sender, GenericEventArgs<Stream> args)
         {
