@@ -28,23 +28,23 @@ namespace Donna.Core.TTS.Client.Tests
             var requestUri = new Uri("https://westus.tts.speech.microsoft.com/cognitiveservices/v1");
 
             var ssmlBuilder = new SsmlBuilder();
-
-            var cortana = new Synthesize(ssmlBuilder);
+            var cortana = new Synthesize();
 
             cortana.OnAudioAvailable += PlayAudio;
             cortana.OnError += ErrorHandler;
+
+            string voiceName = "Microsoft Server Speech Text to Speech Voice (en-US, Jessa24KRUS)";
+            // string voiceName = "Microsoft Server Speech Text to Speech Voice (en-US, Guy24KRUS)";
+            // string voiceName = "Microsoft Server Speech Text to Speech Voice (en-US, ZiraRUS)";
+
+            string ssml = ssmlBuilder.GenerateSsml("en-US", Gender.Male, voiceName, "Hello. You are so awesome!");
 
             var requestParams = new TTSRequestParameters()
             {
                 AuthorizationToken = accessToken,
                 RequestUri = requestUri,
                 OutputFormat = AudioOutputFormat.Riff24Khz16BitMonoPcm,
-                Locale = "en-US",
-                Ssml = ssmlBuilder.GenerateSsml("en-US", Gender.Male, "Microsoft Server Speech Text to Speech Voice (en-US, Jessa24KRUS)", "Hello. You are so awesome!"),
-                VoiceName = "Microsoft Server Speech Text to Speech Voice (en-US, Jessa24KRUS)",
-                // request.VoiceName = "Microsoft Server Speech Text to Speech Voice (en-US, Guy24KRUS)";
-                // request.VoiceName = "Microsoft Server Speech Text to Speech Voice (en-US, ZiraRUS)";
-                VoiceType = Gender.Female
+                Ssml = ssml
             };
 
             // Reuse Synthesize object to minimize latency

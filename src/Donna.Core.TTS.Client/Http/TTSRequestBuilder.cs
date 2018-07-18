@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Donna.Core.TTS.Client.Http
 {
-    public class TTSRequestBuilder
+    class TTSRequestBuilder
     {
         public TTSRequest Build(TTSRequestParameters parameters)
         {

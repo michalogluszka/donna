@@ -19,17 +19,10 @@ namespace Donna.Core.TTS.Client
     /// </summary>
     public class Synthesize
     {
-        private ISsmlBuilder _ssmlBuilder;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Synthesize"/> class.
         /// </summary>
-        public Synthesize(ISsmlBuilder ssmlBuilder)
-        {
-            _ssmlBuilder = ssmlBuilder;
-        }
-
-        ~Synthesize()
+        public Synthesize()
         {
         }
 

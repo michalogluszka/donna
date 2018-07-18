@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Donna.Core.TTS.Client.Http
 {
-    public class TTSRequest : IDisposable
+    class TTSRequest : IDisposable
     {
         public TTSRequest()
         {            
