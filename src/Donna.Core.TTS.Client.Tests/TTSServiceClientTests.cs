@@ -11,7 +11,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Donna.Core.TTS.Client.Tests
 {
     [TestClass]
-    public class SynthetiseTests
+    public class TTSServiceClientTests
     {
         private string _accessToken;
 
@@ -32,7 +32,7 @@ namespace Donna.Core.TTS.Client.Tests
         public void VoiceNameTest()
         {
             var ssmlBuilder = new SimpleTextSsmlBuilder();
-            var cortana = new Synthesize();
+            var cortana = new TTSServiceClient();
 
             cortana.OnAudioAvailable += PlayAudio;
             cortana.OnError += ErrorHandler;
@@ -51,7 +51,6 @@ namespace Donna.Core.TTS.Client.Tests
                 Ssml = ssml
             };
 
-            // Reuse Synthesize object to minimize latency
             cortana.Speak(CancellationToken.None, requestParams).Wait();          
 
 

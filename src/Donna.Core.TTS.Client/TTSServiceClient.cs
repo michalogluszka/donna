@@ -17,12 +17,12 @@ namespace Donna.Core.TTS.Client
     /// <summary>
     /// Sample synthesize request
     /// </summary>
-    public class Synthesize
+    public class TTSServiceClient
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Synthesize"/> class.
+        /// Initializes a new instance of the <see cref="TTSServiceClient"/> class.
         /// </summary>
-        public Synthesize()
+        public TTSServiceClient()
         {
         }
 
