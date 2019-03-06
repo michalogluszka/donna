@@ -38,6 +38,6 @@ div.app {
   background-image: url('./assets/donna_background.jpg');
   background-position: center;
   background-repeat: no-repeat;
-  /*background-size: cover;*/
+  background-size: contain;
 }
 </style>
