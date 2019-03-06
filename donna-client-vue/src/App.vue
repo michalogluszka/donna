@@ -5,9 +5,13 @@
 </template>
 
 <script lang="ts">
+
 import { Component, Vue } from 'vue-property-decorator';
+import BootstrapVue from 'bootstrap-vue';
 import HelloWorld from './components/HelloWorld.vue';
 import DonnaMain from './components/DonnaMain.vue';
+
+Vue.use(BootstrapVue);
 
 @Component({
   components: {

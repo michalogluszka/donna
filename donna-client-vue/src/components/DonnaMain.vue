@@ -1,5 +1,6 @@
 <template>
   <div class="hello">
+    <b-button variant="danger">Text</b-button>
     <h3>{{ msg }}</h3>
   </div>
 </template>
