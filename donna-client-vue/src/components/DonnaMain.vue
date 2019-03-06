@@ -18,4 +18,8 @@ export default class DonnaMain extends Vue {
 h3 {
   margin: 40px 0 0;
 }
+
+div.hello {
+  color: red;
+}
 </style>
