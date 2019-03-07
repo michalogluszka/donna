@@ -24,11 +24,11 @@ Vue.use(BootstrapVue);
 })
 
 export default class App extends Vue {
-  mounted() {
-    Axios({ method: "GET", 'url': "https://httpbin.org/ip"}).then(result => {
+  private mounted() {
+    Axios({ method: 'GET', url: 'https://httpbin.org/ip'}).then((result) => {
       console.log(result);
-      }, error => {
-        console.error(error)
+      }, (error) => {
+        console.error(error);
     });
   }
 }
