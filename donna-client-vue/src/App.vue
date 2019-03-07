@@ -8,8 +8,12 @@
 
 import { Component, Vue } from 'vue-property-decorator';
 import BootstrapVue from 'bootstrap-vue';
+import Axios from 'axios';
+
 import HelloWorld from './components/HelloWorld.vue';
 import DonnaMain from './components/DonnaMain.vue';
+
+
 
 Vue.use(BootstrapVue);
 
@@ -19,7 +23,15 @@ Vue.use(BootstrapVue);
   },
 })
 
-export default class App extends Vue {}
+export default class App extends Vue {
+  mounted() {
+    Axios({ method: "GET", 'url': "https://httpbin.org/ip"}).then(result => {
+      console.log(result);
+      }, error => {
+        console.error(error)
+    });
+  }
+}
 </script>
 
 <style>
