@@ -3,9 +3,9 @@
   <b-btn v-on:click="saySomething">Say</b-btn>  
   <h3>{{ welcomeMessage }}</h3>
   <div class="chat">        
-    <virtual-list :size="40" :remain="8">
-      <item v-for="item in messageList" v-bind:key="item.value">{{ item }}</item>
-    </virtual-list>
+    <virtualList :size="40" :remain="8">
+      <li v-for="item in messageList" v-bind:key="item.value">{{ item }}</li>
+    </virtualList>
   </div>
 </div>
 </template>
@@ -14,9 +14,11 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
 import axios from 'axios';
-import virtualList from 'vue-virtual-scroll-list';
+import * as virtualList from 'vue-virtual-scroll-list'
 
-@Component
+@Component({
+  components: { virtualList }
+})
 export default class DonnaMain extends Vue {
   @Prop() private welcomeMessage!: string;
 
@@ -51,7 +53,5 @@ h3 {
 
 div.chat {
   color: black;
-  overflow-y: scroll;  
-  height: 300px;
-}
+  }
 </style>
