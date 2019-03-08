@@ -12,13 +12,10 @@ import Axios from 'axios';
 
 @Component
 export default class DonnaMain extends Vue {
+
   @Prop() private welcomeMessage!: string;
 
-  private messageList: string = '';
-
-  private data() {
-    return {};
-  }
+  private messageList = '';
 
   private mounted() {
     this.messageList += this.getTranslation();
