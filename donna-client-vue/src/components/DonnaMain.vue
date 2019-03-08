@@ -3,9 +3,9 @@
   <b-btn v-on:click="saySomething">Say</b-btn>  
   <h3>{{ welcomeMessage }}</h3>
   <div class="chat">        
-    <ul>
-      <li v-for="item in messageList" v-bind:key="item.value">{{ item }}</li>
-    </ul>
+    <virtual-list :size="40" :remain="8">
+      <item v-for="item in messageList" v-bind:key="item.value">{{ item }}</item>
+    </virtual-list>
   </div>
 </div>
 </template>
@@ -13,7 +13,8 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
-import Axios from 'axios';
+import axios from 'axios';
+import virtualList from 'vue-virtual-scroll-list';
 
 @Component
 export default class DonnaMain extends Vue {
@@ -30,7 +31,7 @@ export default class DonnaMain extends Vue {
   }
 
   private getTranslation() {
-    Axios({ method: 'GET', url: 'https://httpbin.org/ip' }).then(
+    axios({ method: 'GET', url: 'https://httpbin.org/ip' }).then(
       (result) => {
         this.messageList.push(result.data.origin);
       },
@@ -51,5 +52,6 @@ h3 {
 div.chat {
   color: black;
   overflow-y: scroll;  
+  height: 300px;
 }
 </style>
