@@ -1,16 +1,39 @@
 <template>
   <div class="hello">
-    <b-button variant="danger">Text</b-button>
-    <h3>{{ msg }}</h3>
+    <h3>{{ welcomeMessage }}</h3>
+    <p>{{ messageList }}</p>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
+import Axios from 'axios';
+
 @Component
 export default class DonnaMain extends Vue {
-  @Prop() private msg!: string;
+  @Prop() private welcomeMessage!: string;
+
+  private messageList: string = '';
+
+  private data() {
+    return {};
+  }
+
+  private mounted() {
+    this.messageList += this.getTranslation();
+  }
+
+  private getTranslation() {
+    return Axios({ method: 'GET', url: 'https://httpbin.org/ip' }).then(
+      (result) => {
+        return result.statusText;
+      },
+      (error) => {
+        return error;
+      },
+    );
+  }
 }
 </script>
 

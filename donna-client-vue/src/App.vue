@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="app main-page d-flex flex-column flex-fill">    
-    <DonnaMain msg="Hi Michal"/>
+    <DonnaMain welcomeMessage="Hi! Let's chat."/>
   </div>
 </template>
 
@@ -8,12 +8,8 @@
 
 import { Component, Vue } from 'vue-property-decorator';
 import BootstrapVue from 'bootstrap-vue';
-import Axios from 'axios';
 
-import HelloWorld from './components/HelloWorld.vue';
 import DonnaMain from './components/DonnaMain.vue';
-
-
 
 Vue.use(BootstrapVue);
 
@@ -24,13 +20,7 @@ Vue.use(BootstrapVue);
 })
 
 export default class App extends Vue {
-  private mounted() {
-    Axios({ method: 'GET', url: 'https://httpbin.org/ip'}).then((result) => {
-      console.log(result);
-      }, (error) => {
-        console.error(error);
-    });
-  }
+
 }
 </script>
 
