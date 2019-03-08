@@ -1,10 +1,9 @@
 <template>
   <div class="hello">
+    <b-btn v-on:click="saySomething">Say</b-btn>
     <h3>{{ welcomeMessage }}</h3>
     <ul>
-      <li v-for="item in messageList" v-bind:key="item.value">
-        {{ item }}
-      </li>
+      <li v-for="item in messageList" v-bind:key="item.value">{{ item }}</li>
     </ul>
   </div>
 </template>
@@ -16,10 +15,13 @@ import Axios from 'axios';
 
 @Component
 export default class DonnaMain extends Vue {
-
   @Prop() private welcomeMessage!: string;
 
   private messageList: string[] = [];
+
+  private saySomething() {
+    this.messageList.push('say new thing');
+  }
 
   private mounted() {
     this.getTranslation();
