@@ -1,7 +1,11 @@
 <template>
   <div class="hello">
     <h3>{{ welcomeMessage }}</h3>
-    <p>{{ messageList }}</p>
+    <ul>
+      <li v-for="item in messageList" v-bind:key="item.value">
+        {{ item }}
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -15,19 +19,19 @@ export default class DonnaMain extends Vue {
 
   @Prop() private welcomeMessage!: string;
 
-  private messageList = '';
+  private messageList: string[] = [];
 
   private mounted() {
-    this.messageList += this.getTranslation();
+    this.getTranslation();
   }
 
   private getTranslation() {
-    return Axios({ method: 'GET', url: 'https://httpbin.org/ip' }).then(
+    Axios({ method: 'GET', url: 'https://httpbin.org/ip' }).then(
       (result) => {
-        return result.statusText;
+        this.messageList.push(result.data.origin);
       },
       (error) => {
-        return error;
+        this.messageList.push(error);
       },
     );
   }
