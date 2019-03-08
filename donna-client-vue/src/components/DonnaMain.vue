@@ -1,11 +1,13 @@
 <template>
-  <div class="hello">
-    <b-btn v-on:click="saySomething">Say</b-btn>
-    <h3>{{ welcomeMessage }}</h3>
+<div>
+  <b-btn v-on:click="saySomething">Say</b-btn>  
+  <h3>{{ welcomeMessage }}</h3>
+  <div class="chat">        
     <ul>
       <li v-for="item in messageList" v-bind:key="item.value">{{ item }}</li>
     </ul>
   </div>
+</div>
 </template>
 
 <script lang="ts">
@@ -19,7 +21,7 @@ export default class DonnaMain extends Vue {
 
   private messageList: string[] = [];
 
-  private saySomething() {
+  private saySomething(): void {
     this.messageList.push('say new thing');
   }
 
@@ -46,7 +48,8 @@ h3 {
   margin: 40px 0 0;
 }
 
-div.hello {
-  color: darkgreen;
+div.chat {
+  color: black;
+  overflow-y: scroll;  
 }
 </style>

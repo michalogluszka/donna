@@ -1,6 +1,18 @@
 <template>
-  <div id="app" class="app main-page d-flex flex-column flex-fill">    
-    <DonnaMain welcomeMessage="Hi! Let's chat."/>
+  <div id="app" class="app main-page d-flex flex-column flex-fill">       
+    <div class="container">
+      <div class="row">
+        <div class="col-1">
+          &nbsp;
+        </div>
+        <div class="col">
+          <DonnaMain welcomeMessage="Hi! Let's chat."/>
+        </div>
+        <div class="col-1">
+          &nbsp;
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
