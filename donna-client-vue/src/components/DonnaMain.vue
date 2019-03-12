@@ -30,9 +30,9 @@ export default class DonnaMain extends Vue {
   }
 
   private getTranslation() {
-    Axios({ method: 'GET', url: 'https://httpbin.org/ip' }).then(
+    Axios({ method: 'GET', url: 'https://localhost:44382/api/values' }).then(
       (result) => {
-        this.messageList.unshift(result.data.origin);
+        this.messageList.unshift(result.data);
       },
       (error) => {
         this.messageList.unshift(error);

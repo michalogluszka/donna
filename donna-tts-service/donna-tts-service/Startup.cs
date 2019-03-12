@@ -26,6 +26,13 @@ namespace DonnaTtsService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddCors(o => o.AddPolicy("Public Policy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,6 +47,7 @@ namespace DonnaTtsService
                 app.UseHsts();
             }
 
+            app.UseCors("Public Policy");
             app.UseHttpsRedirection();
             app.UseMvc();
         }
