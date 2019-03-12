@@ -22,11 +22,11 @@ export default class DonnaMain extends Vue {
   private messageList: string[] = [];
 
   private saySomething(): void {
-    this.messageList.unshift('say new thing');
+    this.getTranslation();
   }
 
   private mounted() {
-    this.getTranslation();
+    
   }
 
   private getTranslation() {
