@@ -49,7 +49,6 @@ h3 {
 }
 
 div.main {
-  background-color: #00121212;
   height: 100vh;
 }
 
