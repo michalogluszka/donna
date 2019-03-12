@@ -5,16 +5,42 @@ VisualStudioVersion = 15.0.28010.2046
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DonnaTtsService", "DonnaTtsService\DonnaTtsService.csproj", "{3CDDF54F-E3FA-4990-85D3-A8169F35E283}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpeechServicesToolkit", "SpeechServicesToolkit\SpeechServicesToolkit.csproj", "{861D5043-4645-4DB3-8EA2-4B97DC618A85}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpeechServicesToolkit.Tests", "SpeechServicesToolkit.Tests\SpeechServicesToolkit.Tests.csproj", "{AF895B7C-3685-4F78-9509-34C88AAC0DD1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
 		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{3CDDF54F-E3FA-4990-85D3-A8169F35E283}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3CDDF54F-E3FA-4990-85D3-A8169F35E283}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CDDF54F-E3FA-4990-85D3-A8169F35E283}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3CDDF54F-E3FA-4990-85D3-A8169F35E283}.Debug|x64.Build.0 = Debug|Any CPU
 		{3CDDF54F-E3FA-4990-85D3-A8169F35E283}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3CDDF54F-E3FA-4990-85D3-A8169F35E283}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CDDF54F-E3FA-4990-85D3-A8169F35E283}.Release|x64.ActiveCfg = Release|Any CPU
+		{3CDDF54F-E3FA-4990-85D3-A8169F35E283}.Release|x64.Build.0 = Release|Any CPU
+		{861D5043-4645-4DB3-8EA2-4B97DC618A85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{861D5043-4645-4DB3-8EA2-4B97DC618A85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{861D5043-4645-4DB3-8EA2-4B97DC618A85}.Debug|x64.ActiveCfg = Debug|x64
+		{861D5043-4645-4DB3-8EA2-4B97DC618A85}.Debug|x64.Build.0 = Debug|x64
+		{861D5043-4645-4DB3-8EA2-4B97DC618A85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{861D5043-4645-4DB3-8EA2-4B97DC618A85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{861D5043-4645-4DB3-8EA2-4B97DC618A85}.Release|x64.ActiveCfg = Release|x64
+		{861D5043-4645-4DB3-8EA2-4B97DC618A85}.Release|x64.Build.0 = Release|x64
+		{AF895B7C-3685-4F78-9509-34C88AAC0DD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF895B7C-3685-4F78-9509-34C88AAC0DD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF895B7C-3685-4F78-9509-34C88AAC0DD1}.Debug|x64.ActiveCfg = Debug|x64
+		{AF895B7C-3685-4F78-9509-34C88AAC0DD1}.Debug|x64.Build.0 = Debug|x64
+		{AF895B7C-3685-4F78-9509-34C88AAC0DD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF895B7C-3685-4F78-9509-34C88AAC0DD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF895B7C-3685-4F78-9509-34C88AAC0DD1}.Release|x64.ActiveCfg = Release|x64
+		{AF895B7C-3685-4F78-9509-34C88AAC0DD1}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
